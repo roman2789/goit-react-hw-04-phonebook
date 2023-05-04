@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import { nanoid } from 'nanoid';
 import propTypes from 'prop-types';
 import { AddButton, FormLabel, MainForm, Input } from './ContactFormStyled';
@@ -16,39 +15,35 @@ const requiredSchema = Yup.object().shape({
 
 const initialValues = { name: '', number: '' };
 
-class ContactForm extends Component {
-  handleFormSubmit = ({ name, number }, { resetForm }) => {
+export const ContactForm = ({ onSubmit }) => {
+  const handleFormSubmit = ({ name, number }, { resetForm }) => {
     const id = nanoid();
-    this.props.onSubmit({ id, name, number });
+    onSubmit({ id, name, number });
     resetForm();
   };
 
-  render() {
-    return (
-      <Formik
-        initialValues={initialValues}
-        validationSchema={requiredSchema}
-        onSubmit={this.handleFormSubmit}
-      >
-        <MainForm>
-          <FormLabel htmlFor="name">
-            Name
-            <Input type="text" name="name" />
-            <ErrorMessage name="name" />
-          </FormLabel>
-          <FormLabel htmlFor="number">
-            Number
-            <Input type="tel" name="number" />
-            <ErrorMessage name="number" />
-          </FormLabel>
-          <AddButton type="submit">Add contact</AddButton>
-        </MainForm>
-      </Formik>
-    );
-  }
-}
-
-export default ContactForm;
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={requiredSchema}
+      onSubmit={handleFormSubmit}
+    >
+      <MainForm>
+        <FormLabel htmlFor="name">
+          Name
+          <Input type="text" name="name" />
+          <ErrorMessage name="name" />
+        </FormLabel>
+        <FormLabel htmlFor="number">
+          Number
+          <Input type="tel" name="number" />
+          <ErrorMessage name="number" />
+        </FormLabel>
+        <AddButton type="submit">Add contact</AddButton>
+      </MainForm>
+    </Formik>
+  );
+};
 
 ContactForm.propTypes = {
   onSubmit: propTypes.func.isRequired,

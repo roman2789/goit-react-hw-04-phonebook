@@ -1,10 +1,10 @@
-import ContactList from './ContactList/ContactList';
-import Filter from './Filter/Filter';
-import ContactForm from './ContactForm/ContactForm';
+import { ContactList } from './ContactList/ContactList';
+import { Filter } from './Filter/Filter';
+import { ContactForm } from './ContactForm/ContactForm';
 import { Container, TitlePhoneBook, TitleContacts } from './AppStyled';
 import { useState, useEffect } from 'react';
 
-const contactList = [
+const initialContacts = [
   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
   { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
   { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
@@ -12,14 +12,16 @@ const contactList = [
 ];
 
 export const App = () => {
-  const [contacts, setContacts] = useState(contactList);
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
+  const [contacts, setContacts] = useState(() => {
     const contact = localStorage.getItem('contacts');
     const parsedContacts = JSON.parse(contact);
-    parsedContacts && setContacts(parsedContacts);
-  }, []);
+    if (parsedContacts) {
+      return parsedContacts;
+    } else {
+      return initialContacts;
+    }
+  });
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
@@ -31,6 +33,7 @@ export const App = () => {
 
   const onFilterContacts = () => {
     let filteredContacts = [];
+
     const normalizedFilter = filter.toLowerCase();
     if (filter) {
       filteredContacts = contacts.filter(contact =>
@@ -41,7 +44,6 @@ export const App = () => {
     }
     return filteredContacts;
   };
-
   const addContact = ({ name, id, number }) => {
     const contact = { id, name, number };
     const nameComparison = contacts.find(
@@ -55,8 +57,7 @@ export const App = () => {
       return [contact, ...prevContacts];
     });
   };
-
-  const deleteContactHandler = dataId => {
+  const deleteContactHandle = dataId => {
     let filterdList = contacts.filter(contact => contact.id !== dataId);
     setContacts([...filterdList]);
   };
@@ -70,7 +71,7 @@ export const App = () => {
 
       <ContactList
         filteredContacts={onFilterContacts()}
-        onClickDeleteContact={deleteContactHandler}
+        onClickDeleteContact={deleteContactHandle}
       />
     </Container>
   );

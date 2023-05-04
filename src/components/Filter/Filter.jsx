@@ -1,7 +1,7 @@
 import propTypes from 'prop-types';
 import { FilterBox, FilterInput } from './FilterStyled';
 
-const Filter = ({ filter, onFilter }) => {
+export const Filter = ({ filter, onFilter }) => {
   return (
     <FilterBox>
       <label>
@@ -16,8 +16,6 @@ const Filter = ({ filter, onFilter }) => {
     </FilterBox>
   );
 };
-
-export default Filter;
 
 Filter.propTypes = {
   onFilter: propTypes.func.isRequired,
