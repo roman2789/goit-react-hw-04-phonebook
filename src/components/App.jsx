@@ -44,7 +44,8 @@ export const App = () => {
     }
     return filteredContacts;
   };
-  const addContact = ({ name, id, number }) => {
+
+  const addContact = ({ id, name, number }) => {
     const contact = { id, name, number };
     const nameComparison = contacts.find(
       contact => contact.name.toLowerCase() === name.toLowerCase()
@@ -52,7 +53,7 @@ export const App = () => {
     setContacts(prevContacts => {
       if (nameComparison) {
         alert(`${name} is already in contacts`);
-        return;
+        return contacts;
       }
       return [contact, ...prevContacts];
     });
